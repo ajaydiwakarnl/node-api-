@@ -1,41 +1,102 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const bcrypt = require("bcrypt");
+
 const schema = new mongoose.Schema({
     name:{
         type:String,
         required:[true,'This field is required'],
-        validate:[validator.isAlpha,'Names contains only alphabets ']
     },
-    email:{
+    sku:{
         type:String,
         required:[true,'This field is required'],
-        validate:[validator.isEmail,'Not valid email'],
-        unique:[true, 'This email address is taken.'],
+        unique:[true, 'This sku number is taken.'],
     },
-    password:{
+    condition:{
         type:String,
-        minlength:[6,'Password should be at least six characters'],
-        required: [true,'This field is required'],
+        default:"new",
     },
-    phone:{
+    size_name:{
         type:String,
-        minlength: 10,
-        required:true,
+        default:null,
     },
-    status:{
-      type:Number,
-       default:0
+    size_qty:{
+        type:String,
+        default:null,
     },
-    role:{
-        type:Number,
+    size_price:{
+        type:String,
+        default:null,
+    },
+
+    category:{
+        type:String,
+    },
+
+    sub_category:{
+        type:String,
+    },
+
+    child_category:{
+        type:String,
+    },
+
+    estimate_shipping_time :{
+        type:String,
+        default:null,
+    },
+
+    whole_sale_qty :{
+        type:String,
+        default:null,
+    },
+    whole_sale_discount:{
+        type:String,
+        default:null,
+    },
+
+    stock:{
+        type:String,
+    },
+
+    description:{
+        type:String,
+    },
+
+    return_policy :{
+        type:String,
+    },
+
+
+    address:{
+        type:String,
+    },
+
+    city:{
+        type:String,
+    },
+
+    country:{
+        type:String,
+    },
+
+    postal_code:{
+        type:string,
+    },
+
+    image:{
+        type:String,
+    },
+
+    price:{
+        type:String,
+    },
+
+    youtube_url:{
+        type:String
     }
 
 });
 
-schema.pre('save',async function(next) {
-    this.password = await bcrypt.hash(this.password, 12);
-    next();
-});
 
-module.exports = mongoose.model('users',schema);
+
+module.exports = mongoose.model('product',schema);

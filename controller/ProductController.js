@@ -1,65 +1,66 @@
-const userModel = require('../model/user.model')
+const productModel = require('../model/product.model')
 const bcrypt = require('bcrypt');
+const util = require('util');
+const sleep = util.promisify(setTimeout);
 
 module.exports = {
-    register: async (req, res) => {
+
+    index: async (req,res)=>{
+       /* await sleep(3000);*/
         try {
-            const dataToSave = {
-                email: req.body.email,
-                password: req.body.password,
-                phone: req.body.mobile_number,
-                name: req.body.name,
-                role : req.body.role,
-            };
-            const user = await userModel.create(dataToSave);
+            productModel.find({},function(error,product){
+                if(!error){
+                    if(!product) {
+                        return res.status(200).json({
+                            success: false,
+                            message: "Product empty",
+                            data: null
+                        });
+                    }
 
-            const data = {
-                'id': user._id,
-                'email': user.email,
-                'mobile_number': user.phone,
-                'status': user.status,
-                'role': user.role,
-            }
+                    const  data = [];
+                    product.forEach(function (item){
+                        const itemArray = {
+                            "name" : item.name,
+                            "sku"  : item.sku,
+                            "condition" : item.condition,
+                            "category"  : item.category,
+                            "sub_category" : item.sub_condition,
+                            "child_category" :item.child_condition ,
+                            "estimate_time"    : item.estimate_shipping_time,
+                            "size_name"        :item.size_name,
+                            "size_qty"         :item.size_qty,
+                            "size_price"       : item.size_price,
+                            "whole_sale_qty"        : item.whole_sale_qty,
+                            "whole_sale_discount"   : item.whole_sale_discount,
+                            "stock"          : item.stock,
+                            "description"    : item.description,
+                            "return_policy"  : item.return_policy,
+                            "address"        : item.address,
+                            "city"           : item.city,
+                            "country"        : item.country,
+                            "postal_code"    : item.postal_code,
+                            "image"          : item.image,
+                            "price"          : item.price,
+                            "youtube_url"    : item.youtube_url
 
-            return res.status(200).json({
-                success: true,
-                message: "",
-                data : data,
+                        }
+                        data.push(itemArray);
+                    })
+                    return res.status(200).json({
+                        success: true,
+                        message: "Product List",
+                        data: data
+                    });
+                }else{
+                    return res.status(500).json({
+                        success: true,
+                        message: error,
+                        data: null
+                    });
+                }
             });
-        } catch(e) {
-            return res.status(500).json({
-                success: false,
-                message: e.message,
-                data: null
-            });
-        }
-    },
-    doLogin: async (req, res) => {
-        try {
-            const user = await userModel.findOne({ email: req.body.email });
-            console.log(user, req.body);
-            if(!user || !(await bcrypt.compare(req.body.password, user.password))) {
-                return res.status(200).json({
-                    success: false,
-                    message: "Invalid Email or Password",
-                    data: null
-                });
-            }
-
-            const data = {
-                'id': user._id,
-                'email': user.email,
-                'mobile_number': user.phone,
-                'status': user.status,
-                'role': user.role,
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: "Login Successfully",
-                data: data
-            });
-        } catch (e) {
+        }catch (e) {
             res.status(500).json({
                 success: false,
                 message: e.message,
@@ -67,4 +68,47 @@ module.exports = {
             });
         }
     },
+    createProduct:async (req,res)=>{
+        try {
+            console.log(req);
+            const data = {
+                 name      : req.body.product_name,
+                 sku       : req.body.product_sku,
+                 condition : req.body.product_condition,
+                 category          : req.body.category,
+                 sub_category      : req.body.sub_category,
+                 child_category    : req.body.child_category,
+                 estimate_shipping_time    : req.body.product_estimate_time,
+                 size_name        : req.body.product_size_name,
+                 size_qty         : req.body.product_size_qty,
+                 size_price       : req.body.product_size_price,
+                 whole_sale_qty        : req.body.product_whole_qty,
+                 whole_sale_discount   : req.body.product_whole_discount,
+                 stock            : req.body.product_stock,
+                 description      : req.body.product_description,
+                 return_policy    : req.body.product_return_policy,
+                 address          : req.body.product_address,
+                 city             : req.body.product_city,
+                 country          : req.body.product_country,
+                 postal_code      : req.body.postal_code,
+                 image            : req.body.product_image,
+                 price            : req.body.product_current_price,
+                 youtube_url      : req.body.product_youtube_url,
+            };
+            await productModel.create(data);
+            return res.status(200).json({
+                success: true,
+                message: "Product created successfully",
+                data : data,
+            });
+        }catch (e){
+            return res.status(200).json({
+                success: false,
+                message: e.message,
+                data : null,
+            });
+        }
+    }
+
+
 }
