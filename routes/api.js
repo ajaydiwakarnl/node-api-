@@ -9,5 +9,6 @@ route.post('/api/login', [apiController.doLogin]);
 //Product Routes
 route.get('/api/product/index', [productController.index]);
 route.post('/api/product/create', [productController.createProduct]);
+route.post('/api/product/changeStatus', [productController.changeStatus]);
 
 module.exports = route;

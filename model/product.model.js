@@ -17,15 +17,15 @@ const schema = new mongoose.Schema({
     },
     size_name:{
         type:String,
-        default:null,
+
     },
     size_qty:{
         type:String,
-        default:null,
+
     },
     size_price:{
         type:String,
-        default:null,
+
     },
 
     category:{
@@ -42,16 +42,16 @@ const schema = new mongoose.Schema({
 
     estimate_shipping_time :{
         type:String,
-        default:null,
+
     },
 
     whole_sale_qty :{
         type:String,
-        default:null,
+
     },
     whole_sale_discount:{
         type:String,
-        default:null,
+
     },
 
     stock:{
@@ -80,7 +80,7 @@ const schema = new mongoose.Schema({
     },
 
     postal_code:{
-        type:string,
+        type:String,
     },
 
     image:{
@@ -93,6 +93,11 @@ const schema = new mongoose.Schema({
 
     youtube_url:{
         type:String
+    },
+
+    status:{
+        type:Number,
+        default:1,
     }
 
 });

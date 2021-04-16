@@ -21,6 +21,7 @@ module.exports = {
                     const  data = [];
                     product.forEach(function (item){
                         const itemArray = {
+                            "id" : item.id,
                             "name" : item.name,
                             "sku"  : item.sku,
                             "condition" : item.condition,
@@ -42,7 +43,8 @@ module.exports = {
                             "postal_code"    : item.postal_code,
                             "image"          : item.image,
                             "price"          : item.price,
-                            "youtube_url"    : item.youtube_url
+                            "youtube_url"    : item.youtube_url,
+                            "status"         : item.status
 
                         }
                         data.push(itemArray);
@@ -94,6 +96,7 @@ module.exports = {
                  image            : req.body.product_image,
                  price            : req.body.product_current_price,
                  youtube_url      : req.body.product_youtube_url,
+                 status           : 1,
             };
             await productModel.create(data);
             return res.status(200).json({
@@ -108,7 +111,28 @@ module.exports = {
                 data : null,
             });
         }
+    },
+    
+    changeStatus:async (req,res)=>{
+        try{
+            const data = {
+                status : req.body.status
+            }
+            product = await productModel.findByIdAndUpdate(req.body.id,data);
+            return res.status(200).json({
+                success: true,
+                message: "Successfully update status",
+                data : product,
+            });
+        }catch (e) {
+            return res.status(200).json({
+                success: false,
+                message: e.message,
+                data : null,
+            });
+        }
     }
+    
 
 
 }
