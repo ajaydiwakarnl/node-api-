@@ -77,22 +77,22 @@ module.exports = {
                  name      : req.body.product_name,
                  sku       : req.body.product_sku,
                  condition : req.body.product_condition,
-                 category          : req.body.category,
-                 sub_category      : req.body.sub_category,
-                 child_category    : req.body.child_category,
-                 estimate_shipping_time    : req.body.product_estimate_time,
-                 size_name        : req.body.product_size_name,
-                 size_qty         : req.body.product_size_qty,
+                 category          : req.body.product_category,
+                 sub_category      : req.body.product_sub_category,
+                 child_category    : req.body.product_child_category,
+                 estimate_shipping_time : req.body.product_shipping_time,
+                 size_name        : req.body.product_size,
+                 size_qty         : req.body.product_qty,
                  size_price       : req.body.product_size_price,
                  whole_sale_qty        : req.body.product_whole_qty,
                  whole_sale_discount   : req.body.product_whole_discount,
                  stock            : req.body.product_stock,
                  description      : req.body.product_description,
-                 return_policy    : req.body.product_return_policy,
+                 return_policy    : req.body.product_return_ploicy,
                  address          : req.body.product_address,
                  city             : req.body.product_city,
                  country          : req.body.product_country,
-                 postal_code      : req.body.postal_code,
+                 postal_code      : req.body.product_postal_code,
                  image            : req.body.product_image,
                  price            : req.body.product_current_price,
                  youtube_url      : req.body.product_youtube_url,
@@ -105,7 +105,7 @@ module.exports = {
                 data : data,
             });
         }catch (e){
-            return res.status(200).json({
+            return res.status(500).json({
                 success: false,
                 message: e.message,
                 data : null,
@@ -118,19 +118,39 @@ module.exports = {
             const data = {
                 status : req.body.status
             }
-            product = await productModel.findByIdAndUpdate(req.body.id,data);
+            await productModel.findByIdAndUpdate(req.body.id,data);
             return res.status(200).json({
                 success: true,
                 message: "Successfully update status",
-                data : product,
+                data : null,
             });
         }catch (e) {
-            return res.status(200).json({
+            return res.status(500).json({
                 success: false,
                 message: e.message,
                 data : null,
             });
         }
+    },
+
+    editProduct: async (req,res) => {
+        try{
+            console.log(res);
+           product =  await productModel.findById(req.body.id);
+            return res.status(200).json({
+                success: true,
+                message: "Edit Product",
+                data : product,
+            });
+
+        }catch (e){
+            return res.status(500).json({
+                success: false,
+                message: e.message,
+                data : null,
+            });
+        }
+
     }
     
 
