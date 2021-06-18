@@ -37,7 +37,6 @@ module.exports = {
     doLogin: async (req, res) => {
         try {
             const user = await userModel.findOne({ email: req.body.email });
-            console.log(user, req.body);
             if(!user || !(await bcrypt.compare(req.body.password, user.password))) {
                 return res.status(200).json({
                     success: false,
