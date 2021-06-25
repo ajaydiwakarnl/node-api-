@@ -1,35 +1,39 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 const bcrypt = require("bcrypt");
 const schema = new mongoose.Schema({
     name:{
         type:String,
-        required:[true,'This field is required'],
-        validate:[validator.isAlpha,'Names contains only alphabets ']
+
     },
     email:{
         type:String,
-        required:[true,'This field is required'],
-        validate:[validator.isEmail,'Not valid email'],
-        unique:[true, 'This email address is taken.'],
+        unique:[true],
     },
     password:{
         type:String,
-        minlength:[6,'Password should be at least six characters'],
-        required: [true,'This field is required'],
+        minlength:[6],
     },
     phone:{
         type:String,
         minlength: 10,
-        required:true,
-    },
-    status:{
-      type:Number,
-       default:0
     },
     role:{
+        type:String,
+        default:"users",
+        enum: ["admin", "users"]
+    },
+    image:{
+        type: String,
+        default:null
+    },
+    isBlocked:{
         type:Number,
-    }
+        default:0
+    },
+
+
+
+
 
 });
 
